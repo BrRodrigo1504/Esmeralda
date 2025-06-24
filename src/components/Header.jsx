@@ -42,7 +42,15 @@ const Header = () => {
 
           {/* CTA Button Desktop */}
           <div className="hidden md:block">
-            <Button className="bg-emerald-gradient hover:opacity-90 text-white font-poppins">
+            <Button 
+              className="bg-emerald-gradient hover:opacity-90 text-white font-poppins"
+              onClick={() => {
+                const contactSection = document.getElementById('contato');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
               Solicitar Orçamento
             </Button>
           </div>
@@ -74,7 +82,16 @@ const Header = () => {
                   {item.name}
                 </a>
               ))}
-              <Button className="bg-emerald-gradient hover:opacity-90 text-white font-poppins mt-4">
+              <Button 
+                className="bg-emerald-gradient hover:opacity-90 text-white font-poppins mt-4"
+                onClick={() => {
+                  const contactSection = document.getElementById('contato');
+                  if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                  setIsMenuOpen(false);
+                }}
+              >
                 Solicitar Orçamento
               </Button>
             </nav>

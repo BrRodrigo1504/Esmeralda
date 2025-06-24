@@ -10,7 +10,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: 'Olá! Sou a assistente virtual da Esmeralda. Como posso ajudar você a encontrar a bijuteria perfeita?',
+      text: 'Olá! Sou a Chica, assistente virtual da Esmeralda. Como posso ajudar você a encontrar a bijuteria perfeita?',
       sender: 'bot',
       timestamp: new Date()
     }

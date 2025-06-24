@@ -106,7 +106,7 @@ const HowItWorks = () => {
           >
             <div className="relative z-10">
               <img
-                src="/src/assets/colar_personalizado_4.jpg"
+                src="/colar_personalizado_4.jpg"
                 alt="Processo de gravação a laser"
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />

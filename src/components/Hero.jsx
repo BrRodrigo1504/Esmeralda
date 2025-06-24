@@ -57,6 +57,12 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 className="bg-emerald-gradient hover:opacity-90 text-white font-poppins px-8 py-3"
+                onClick={() => {
+                  const catalogSection = document.getElementById('catalogo');
+                  if (catalogSection) {
+                    catalogSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
               >
                 Ver Catálogo
               </Button>
@@ -64,6 +70,12 @@ const Hero = () => {
                 variant="outline" 
                 size="lg" 
                 className="border-emerald-custom text-emerald-custom hover:bg-emerald-custom hover:text-white font-poppins px-8 py-3"
+                onClick={() => {
+                  const howItWorksSection = document.getElementById('personalizar');
+                  if (howItWorksSection) {
+                    howItWorksSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
               >
                 Como Funciona
               </Button>

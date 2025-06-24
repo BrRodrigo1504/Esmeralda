@@ -155,6 +155,12 @@ const Catalog = () => {
                     <Button 
                       size="sm" 
                       className="bg-emerald-gradient hover:opacity-90 text-white font-poppins"
+                      onClick={() => {
+                        const contactSection = document.getElementById('contato');
+                        if (contactSection) {
+                          contactSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
                     >
                       Personalizar
                     </Button>
@@ -177,6 +183,12 @@ const Catalog = () => {
             size="lg" 
             variant="outline"
             className="border-emerald-custom text-emerald-custom hover:bg-emerald-custom hover:text-white font-poppins px-8"
+            onClick={() => {
+              const contactSection = document.getElementById('contato');
+              if (contactSection) {
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
           >
             Ver Mais Produtos
           </Button>
