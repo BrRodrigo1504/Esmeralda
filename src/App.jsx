@@ -6,7 +6,9 @@ import HowItWorks from './components/HowItWorks';
 import About from './components/About';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Chatbot from './components/Chatbot';
+import Chatbot from './components/ChatbotNew';
+import Cart from './components/Cart';
+import { CartProvider } from './contexts/CartContext';
 import './App.css';
 
 function App() {
@@ -43,19 +45,20 @@ function App() {
     };
   }, []);
 
-  return (
-    <div className="min-h-screen bg-white font-poppins">
-      <Header />
-      <main>
+   return (
+    <CartProvider>
+      <div className="min-h-screen bg-white">
+        <Header />
         <Hero />
         <Catalog />
         <HowItWorks />
         <About />
         <Contact />
-      </main>
-      <Footer />
-      <Chatbot />
-    </div>
+        <Footer />
+        <Chatbot />
+        <Cart />
+      </div>
+    </CartProvider>
   );
 }
 

@@ -1,9 +1,18 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Heart, ShoppingCart } from 'lucide-react';
+import { Eye, Heart, ShoppingCart, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import ProductModal from './ProductModal';
+import { useCart } from '@/contexts/CartContext';
 
 const Catalog = () => {
+  const [selectedCategory, setSelectedCategory] = useState('Todos');
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { addToCart } = useCart();
+
   const products = [
     {
       id: 1,
@@ -24,16 +33,16 @@ const Catalog = () => {
     {
       id: 3,
       name: 'Colar Personalizado Redondo',
-      description: 'Formato clássico redondo com sua personalização',
+      description: 'Pingente redondo com gravação personalizada',
       price: 'A partir de €29,90',
       image: '/colar_personalizado_3.jpg',
       category: 'Colares'
     },
     {
       id: 4,
-      name: 'Colar Formato Especial',
-      description: 'Diversos formatos disponíveis para sua criatividade',
-      price: 'A partir de €44,90',
+      name: 'Colar Personalizado Premium',
+      description: 'Colar de alta qualidade com gravação laser premium',
+      price: 'A partir de €49,90',
       image: '/colar_personalizado_4.jpg',
       category: 'Colares'
     },
@@ -52,10 +61,110 @@ const Catalog = () => {
       price: 'A partir de €39,90',
       image: '/colar_spotify_8.png',
       category: 'Colares'
+    },
+    {
+      id: 7,
+      name: 'Conjunto Infantil Bailarina',
+      description: 'Conjunto completo com colar, brincos e pulseira',
+      price: 'A partir de €45,90',
+      image: '/Gh5qcNvoZP6R.jpg',
+      category: 'Conjuntos'
+    },
+    {
+      id: 8,
+      name: 'Conjunto Borboleta Personalizado',
+      description: 'Conjunto delicado com tema borboleta',
+      price: 'A partir de €42,90',
+      image: '/2QD1BrRCAK5B.jpg',
+      category: 'Conjuntos'
+    },
+    {
+      id: 9,
+      name: 'Pulseira Nome Personalizada',
+      description: 'Pulseira infantil com nome personalizado',
+      price: 'A partir de €19,90',
+      image: '/P6xDk2TOFMMW.jpg',
+      category: 'Pulseiras'
+    },
+    {
+      id: 10,
+      name: 'Conjunto Trevo da Sorte',
+      description: 'Conjunto elegante inspirado no trevo da sorte',
+      price: 'A partir de €55,90',
+      image: '/WNVPQyeNr8uD.jpeg',
+      category: 'Conjuntos'
+    },
+    {
+      id: 11,
+      name: 'Colar Coração Cristal',
+      description: 'Colar romântico com pingente de coração em cristal',
+      price: 'A partir de €37,90',
+      image: '/xwZ0sdlI6233.jpg',
+      category: 'Colares'
+    },
+    {
+      id: 12,
+      name: 'Pulseira Infantil com Nome',
+      description: 'Pulseira delicada para crianças com nome personalizado',
+      price: 'A partir de €16,90',
+      image: '/EkYOf3GU5ahR.jpeg',
+      category: 'Pulseiras'
+    },
+    {
+      id: 13,
+      name: 'Brincos Borboleta Dourados',
+      description: 'Brincos elegantes em formato de borboleta',
+      price: 'A partir de €22,90',
+      image: '/POPqyr5mMH7x.jpeg',
+      category: 'Brincos'
+    },
+    {
+      id: 14,
+      name: 'Anel Personalizado com Nome',
+      description: 'Anel delicado com gravação de nome',
+      price: 'A partir de €28,90',
+      image: '/colar_foto_1.jpg',
+      category: 'Anéis'
+    },
+    {
+      id: 15,
+      name: 'Tornozeleira Personalizada',
+      description: 'Tornozeleira elegante com pingentes personalizados',
+      price: 'A partir de €21,90',
+      image: '/colar_olhar_2.jpg',
+      category: 'Tornozeleiras'
     }
   ];
 
-  const categories = ['Todos', 'Colares', 'Pingentes', 'Pulseiras', 'Brincos'];
+  const categories = ['Todos', 'Colares', 'Pingentes', 'Pulseiras', 'Brincos', 'Conjuntos', 'Anéis', 'Tornozeleiras'];
+
+  const openProductModal = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeProductModal = () => {
+    setSelectedProduct(null);
+    setIsModalOpen(false);
+  };
+
+  const handleQuickAdd = (product) => {
+    addToCart(product);
+    
+    // Feedback visual
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 font-poppins';
+    notification.textContent = 'Produto adicionado ao carrinho!';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 3000);
+  };
+
+  const filteredProducts = selectedCategory === 'Todos' 
+    ? products 
+    : products.filter(product => product.category === selectedCategory);
 
   return (
     <section id="catalogo" className="py-20 bg-white">
@@ -88,9 +197,10 @@ const Catalog = () => {
           {categories.map((category) => (
             <Button
               key={category}
-              variant={category === 'Todos' ? 'default' : 'outline'}
+              variant={selectedCategory === category ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory(category)}
               className={`font-poppins ${
-                category === 'Todos'
+                selectedCategory === category
                   ? 'bg-emerald-gradient text-white'
                   : 'border-emerald-custom text-emerald-custom hover:bg-emerald-custom hover:text-white'
               }`}
@@ -102,7 +212,7 @@ const Catalog = () => {
 
         {/* Grid de produtos */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
+          {filteredProducts.map((product, index) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 30 }}
@@ -121,13 +231,22 @@ const Catalog = () => {
                   {/* Overlay com ações */}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="flex space-x-3">
-                      <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white">
+                      <Button 
+                        size="sm" 
+                        variant="secondary" 
+                        className="bg-white/90 hover:bg-white"
+                        onClick={() => openProductModal(product)}
+                      >
                         <Eye className="w-4 h-4" />
                       </Button>
                       <Button size="sm" variant="secondary" className="bg-white/90 hover:bg-white">
                         <Heart className="w-4 h-4" />
                       </Button>
-                      <Button size="sm" className="bg-emerald-gradient hover:opacity-90">
+                      <Button 
+                        size="sm" 
+                        className="bg-emerald-gradient hover:opacity-90"
+                        onClick={() => handleQuickAdd(product)}
+                      >
                         <ShoppingCart className="w-4 h-4" />
                       </Button>
                     </div>
@@ -155,12 +274,7 @@ const Catalog = () => {
                     <Button 
                       size="sm" 
                       className="bg-emerald-gradient hover:opacity-90 text-white font-poppins"
-                      onClick={() => {
-                        const contactSection = document.getElementById('contato');
-                        if (contactSection) {
-                          contactSection.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
+                      onClick={() => openProductModal(product)}
                     >
                       Personalizar
                     </Button>
@@ -194,6 +308,13 @@ const Catalog = () => {
           </Button>
         </motion.div>
       </div>
+
+      {/* Modal de produto */}
+      <ProductModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={closeProductModal}
+      />
     </section>
   );
 };

@@ -156,6 +156,59 @@ const Footer = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Métodos de Pagamento */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="mt-12 pt-8 border-t border-gray-800"
+        >
+          <div className="text-center">
+            <h3 className="text-lg font-playfair font-semibold mb-6">Métodos de Pagamento Aceitos</h3>
+            <div className="flex flex-wrap justify-center items-center gap-4 mb-6">
+              {/* Cartões de Crédito */}
+              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
+                <span className="text-xs font-bold text-blue-600">VISA</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
+                <span className="text-xs font-bold text-red-600">MASTERCARD</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
+                <span className="text-xs font-bold text-blue-800">AMEX</span>
+              </div>
+              
+              {/* Métodos portugueses */}
+              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
+                <span className="text-xs font-bold text-green-600">MB WAY</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
+                <span className="text-xs font-bold text-blue-700">MULTIBANCO</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
+                <span className="text-xs font-bold text-blue-600">PayPal</span>
+              </div>
+              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
+                <span className="text-xs font-bold text-purple-600">SEPA</span>
+              </div>
+            </div>
+            <div className="flex justify-center items-center space-x-4 text-sm text-gray-300">
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs">✓</span>
+                </div>
+                <span>Pagamentos 100% Seguros</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs">🔒</span>
+                </div>
+                <span>Certificado SSL</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
       {/* Newsletter */}
