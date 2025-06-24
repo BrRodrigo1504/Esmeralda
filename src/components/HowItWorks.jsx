@@ -35,7 +35,7 @@ const HowItWorks = () => {
     'Materiais de qualidade premium',
     'Processo 100% personalizado',
     'Garantia de satisfação',
-    'Entrega em todo o Brasil',
+    'Entrega em toda a Europa',
     'Suporte especializado'
   ];
 

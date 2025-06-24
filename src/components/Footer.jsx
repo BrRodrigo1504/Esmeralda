@@ -52,21 +52,21 @@ const Footer = () => {
             
             <p className="text-gray-300 font-poppins leading-relaxed">
               Criamos bijuterias personalizadas únicas com gravação a laser de alta precisão. 
-              Transformamos suas memórias em joias que contam histórias.
+              Transformamos suas memórias em joias que contam histórias, feitas em Portugal.
             </p>
             
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-gray-300">
                 <Mail className="w-4 h-4 text-emerald-custom" />
-                <span className="font-poppins text-sm">contato@esmeralda.com.br</span>
+                <span className="font-poppins text-sm">contato@esmeralda.pt</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <Phone className="w-4 h-4 text-emerald-custom" />
-                <span className="font-poppins text-sm">(11) 99999-9999</span>
+                <span className="font-poppins text-sm">+351 912 345 678</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <MapPin className="w-4 h-4 text-emerald-custom" />
-                <span className="font-poppins text-sm">São Paulo, SP - Brasil</span>
+                <span className="font-poppins text-sm">Porto, Portugal</span>
               </div>
             </div>
           </motion.div>

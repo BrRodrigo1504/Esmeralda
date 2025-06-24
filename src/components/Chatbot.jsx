@@ -38,7 +38,7 @@ const Chatbot = () => {
     
     // Preços
     if (message.includes('preço') || message.includes('valor') || message.includes('custa') || message.includes('quanto')) {
-      return 'Nossos preços variam de acordo com o tipo de bijuteria e personalização:\n\n• Colares personalizados: a partir de R$ 69,90\n• Pingentes com foto: a partir de R$ 59,90\n• Pulseiras personalizadas: a partir de R$ 49,90\n• Brincos personalizados: a partir de R$ 39,90\n\nPara um orçamento exato, use nosso formulário de contato!';
+      return 'Nossos preços variam de acordo com o tipo de bijuteria e personalização:\n\n• Colares personalizados: a partir de €29,90\n• Pingentes com foto: a partir de €24,90\n• Pulseiras personalizadas: a partir de €19,90\n• Brincos personalizados: a partir de €16,90\n\nPara um orçamento exato, use nosso formulário de contato!';
     }
     
     // Materiais
@@ -53,7 +53,7 @@ const Chatbot = () => {
     
     // Entrega
     if (message.includes('entrega') || message.includes('prazo') || message.includes('envio')) {
-      return 'Nossos prazos de entrega:\n\n• Produção: 5 a 7 dias úteis\n• Envio: 3 a 10 dias úteis (dependendo da região)\n• Entrega expressa: disponível para SP capital\n\nEnviamos para todo o Brasil com embalagem especial e rastreamento!';
+      return 'Nossos prazos de entrega:\n\n• Produção: 5 a 7 dias úteis\n• Envio: 2 a 5 dias úteis (Portugal continental)\n• Entrega expressa: disponível para Porto e Lisboa\n\nEnviamos para toda a Europa com embalagem especial e rastreamento!';
     }
     
     // Presentes
@@ -78,7 +78,7 @@ const Chatbot = () => {
     
     // Contato
     if (message.includes('contato') || message.includes('telefone') || message.includes('whatsapp')) {
-      return 'Entre em contato conosco:\n\n📧 Email: contato@esmeralda.com.br\n📱 WhatsApp: (11) 99999-9999\n📍 São Paulo, SP\n\nOu use nosso formulário de orçamento aqui no site!';
+      return 'Entre em contato conosco:\n\n📧 Email: contato@esmeralda.pt\n📱 WhatsApp: +351 912 345 678\n📍 Porto, Portugal\n\nOu use nosso formulário de orçamento aqui no site!';
     }
     
     // Resposta padrão

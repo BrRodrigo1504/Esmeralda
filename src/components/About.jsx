@@ -68,17 +68,18 @@ const About = () => {
               </h3>
               <p className="text-gray-600 font-poppins leading-relaxed mb-4">
                 A Esmeralda nasceu do sonho de transformar memórias preciosas em bijuterias 
-                únicas e atemporais. Fundada por artesãos apaixonados pela joalheria, 
-                nossa marca combina tradição artesanal com tecnologia de ponta.
+                únicas e atemporais. Fundada no Porto por artesãos apaixonados pela joalheria, 
+                nossa marca combina tradição portuguesa com tecnologia de ponta.
               </p>
               <p className="text-gray-600 font-poppins leading-relaxed mb-4">
                 Especializamo-nos em gravação a laser de alta precisão, permitindo criar 
                 detalhes impossíveis com técnicas tradicionais. Cada peça é uma obra de 
-                arte personalizada que carrega significado e emoção.
+                arte personalizada que carrega significado e emoção, feita em Portugal.
               </p>
               <p className="text-gray-600 font-poppins leading-relaxed">
                 Hoje, somos referência em bijuterias personalizadas, atendendo clientes 
-                em todo o Brasil com a mesma paixão e dedicação do primeiro dia.
+                em toda a Europa com a mesma paixão e dedicação do primeiro dia, 
+                mantendo a qualidade e tradição portuguesa.
               </p>
             </div>
           </motion.div>
@@ -93,7 +94,7 @@ const About = () => {
           >
             <div className="relative z-10">
               <img
-                src="/src/assets/colar_olhar_2.jpg"
+                src="/colar_olhar_2.jpg"
                 alt="Sobre a Esmeralda"
                 className="w-full h-auto rounded-2xl shadow-2xl"
               />

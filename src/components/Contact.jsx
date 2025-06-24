@@ -75,19 +75,19 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email',
-      content: 'contato@esmeralda.com.br',
-      link: 'mailto:contato@esmeralda.com.br'
+      content: 'contato@esmeralda.pt',
+      link: 'mailto:contato@esmeralda.pt'
     },
     {
       icon: Phone,
       title: 'WhatsApp',
-      content: '(11) 99999-9999',
-      link: 'https://wa.me/5511999999999'
+      content: '+351 912 345 678',
+      link: 'https://wa.me/351912345678'
     },
     {
       icon: MapPin,
       title: 'Localização',
-      content: 'São Paulo, SP - Brasil',
+      content: 'Porto, Portugal',
       link: null
     }
   ];
