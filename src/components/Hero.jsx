@@ -100,7 +100,7 @@ const Hero = () => {
           >
             <div className="relative z-10">
               <img
-                src="/src/assets/colar_foto_1.jpg"
+                src="/colar_foto_1.jpg"
                 alt="Bijuteria personalizada Esmeralda"
                 className="w-full h-auto rounded-2xl shadow-2xl jewelry-shine"
               />

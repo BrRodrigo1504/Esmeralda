@@ -10,7 +10,7 @@ const Catalog = () => {
       name: 'Colar com Foto Personalizada',
       description: 'Colar elegante com gravação de foto em alta definição',
       price: 'A partir de R$ 89,90',
-      image: '/src/assets/colar_foto_1.jpg',
+      image: '/colar_foto_1.jpg',
       category: 'Colares'
     },
     {
@@ -18,7 +18,7 @@ const Catalog = () => {
       name: 'Colar Olhar Personalizado',
       description: 'Design único com gravação de olhares especiais',
       price: 'A partir de R$ 79,90',
-      image: '/src/assets/colar_olhar_2.jpg',
+      image: '/colar_olhar_2.jpg',
       category: 'Colares'
     },
     {
@@ -26,7 +26,7 @@ const Catalog = () => {
       name: 'Colar Personalizado Redondo',
       description: 'Formato clássico redondo com sua personalização',
       price: 'A partir de R$ 69,90',
-      image: '/src/assets/colar_personalizado_3.jpg',
+      image: '/colar_personalizado_3.jpg',
       category: 'Colares'
     },
     {
@@ -34,7 +34,7 @@ const Catalog = () => {
       name: 'Colar Formato Especial',
       description: 'Diversos formatos disponíveis para sua criatividade',
       price: 'A partir de R$ 99,90',
-      image: '/src/assets/colar_personalizado_4.jpg',
+      image: '/colar_personalizado_4.jpg',
       category: 'Colares'
     },
     {
@@ -42,7 +42,7 @@ const Catalog = () => {
       name: 'Pingente Foto Personalizada',
       description: 'Pingente delicado com gravação de foto',
       price: 'A partir de R$ 59,90',
-      image: '/src/assets/pingente_foto_5.png',
+      image: '/pingente_foto_5.png',
       category: 'Pingentes'
     },
     {
@@ -50,7 +50,7 @@ const Catalog = () => {
       name: 'Colar Spotify Personalizado',
       description: 'Grave sua música favorita em formato Spotify',
       price: 'A partir de R$ 89,90',
-      image: '/src/assets/colar_spotify_8.png',
+      image: '/colar_spotify_8.png',
       category: 'Colares'
     }
   ];
