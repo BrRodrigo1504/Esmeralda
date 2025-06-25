@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, CreditCard, Truck, Shield, ArrowLeft, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, CreditCard, Truck, MapPin, User, Mail, Phone, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,11 +8,20 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
+import AddressAutocomplete from './AddressAutocomplete';
 import ShippingCalculator from './ShippingCalculator';
 
 const Checkout = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [shippingCost, setShippingCost] = useState(0);
+  const [selectedShipping, setSelectedShipping] = useState(null);
+  const [shippingAddress, setShippingAddress] = useState({
+    postalCode: '',
+    street: '',
+    city: '',
+    district: '',
+    doorNumber: ''
+  });
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -27,6 +36,20 @@ const Checkout = ({ isOpen, onClose }) => {
   const [orderComplete, setOrderComplete] = useState(false);
 
   const { items, getCartTotal, clearCart } = useCart();
+
+  const handleAddressChange = (address) => {
+    setShippingAddress(address);
+  };
+
+  const handleShippingChange = (shipping) => {
+    setSelectedShipping(shipping);
+    setShippingCost(shipping ? shipping.price : 0);
+  };
+
+  const subtotal = getCartTotal();
+  // Aplicar frete grátis para pedidos acima de €50 em Portugal continental
+  const finalShippingCost = subtotal >= 50 && selectedShipping?.zone !== 'islands' ? 0 : shippingCost;
+  const finalTotal = subtotal + finalShippingCost;
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -142,16 +165,28 @@ const Checkout = ({ isOpen, onClose }) => {
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Subtotal:</span>
-                    <span>€{getCartTotal().toFixed(2)}</span>
+                    <span>€{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Envio:</span>
-                    <span>{shippingCost === 0 ? 'Grátis' : `€${shippingCost.toFixed(2)}`}</span>
+                    <span>
+                      {finalShippingCost === 0 ? (
+                        <span className="text-emerald-600 font-medium">Grátis</span>
+                      ) : (
+                        `€${finalShippingCost.toFixed(2)}`
+                      )}
+                    </span>
                   </div>
+                  {subtotal >= 50 && selectedShipping?.zone !== 'islands' && shippingCost > 0 && (
+                    <div className="flex justify-between text-xs text-emerald-600">
+                      <span>Desconto frete grátis:</span>
+                      <span>-€{shippingCost.toFixed(2)}</span>
+                    </div>
+                  )}
                   <Separator />
                   <div className="flex justify-between font-playfair font-bold text-lg">
                     <span>Total:</span>
-                    <span className="text-emerald-custom">€{(getCartTotal() + shippingCost).toFixed(2)}</span>
+                    <span className="text-emerald-custom">€{finalTotal.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -250,49 +285,34 @@ const Checkout = ({ isOpen, onClose }) => {
                   <motion.div
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="space-y-4"
+                    className="space-y-6"
                   >
                     <h3 className="font-playfair font-semibold text-lg mb-4">Endereço de Entrega</h3>
                     
-                    <div>
-                      <Label htmlFor="address">Endereço</Label>
-                      <Input
-                        id="address"
-                        value={formData.address}
-                        onChange={(e) => handleInputChange('address', e.target.value)}
-                        placeholder="Rua das Flores, 123"
+                    <AddressAutocomplete
+                      onAddressChange={handleAddressChange}
+                      initialValues={shippingAddress}
+                    />
+
+                    {shippingAddress.postalCode && (
+                      <ShippingCalculator
+                        cartItems={items}
+                        destinationPostalCode={shippingAddress.postalCode}
+                        onShippingChange={handleShippingChange}
+                        className="mt-6"
                       />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="city">Cidade</Label>
-                        <Input
-                          id="city"
-                          value={formData.city}
-                          onChange={(e) => handleInputChange('city', e.target.value)}
-                          placeholder="Porto"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="postalCode">Código Postal</Label>
-                        <Input
-                          id="postalCode"
-                          value={formData.postalCode}
-                          onChange={(e) => handleInputChange('postalCode', e.target.value)}
-                          placeholder="4000-000"
-                        />
-                      </div>
-                    </div>
-
-                    <ShippingCalculator onShippingChange={setShippingCost} />
+                    )}
 
                     <div className="flex justify-between pt-4">
                       <Button variant="outline" onClick={handlePrevStep}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Voltar
                       </Button>
-                      <Button onClick={handleNextStep} className="bg-emerald-gradient hover:opacity-90">
+                      <Button 
+                        onClick={handleNextStep} 
+                        className="bg-emerald-gradient hover:opacity-90"
+                        disabled={!shippingAddress.postalCode || !shippingAddress.doorNumber}
+                      >
                         Continuar
                       </Button>
                     </div>

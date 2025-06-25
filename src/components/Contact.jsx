@@ -81,8 +81,8 @@ const Contact = () => {
     {
       icon: Phone,
       title: 'WhatsApp',
-      content: '+351 912 345 678',
-      link: 'https://wa.me/351912345678'
+      content: '+351 939 053 105',
+      link: 'https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os artigos da Esmeralda.'
     },
     {
       icon: MapPin,

@@ -54,7 +54,7 @@ const Header = () => {
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os itens da Esmeralda."
+                href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os artigos da Esmeralda."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-700 hover:text-emerald-custom transition-colors duration-300"
@@ -117,7 +117,7 @@ const Header = () => {
                   <Instagram className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os itens da Esmeralda."
+                  href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os artigos da Esmeralda."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-700 hover:text-emerald-custom transition-colors duration-300"
