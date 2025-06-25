@@ -131,15 +131,15 @@
 }
 
 .text-emerald-custom {
-  color: #50C878;
+  color: #015443;
 }
 
 .bg-emerald-custom {
-  background-color: #50C878;
+  background-color: #015443;
 }
 
 .border-emerald-custom {
-  border-color: #50C878;
+  border-color: #015443;
 }
 
 /* Animações customizadas */
@@ -183,7 +183,7 @@
 
 /* Gradiente esmeralda */
 .bg-emerald-gradient {
-  background: linear-gradient(135deg, #50C878 0%, #2E8B57 100%);
+  background: linear-gradient(135deg, #015443 0%, #0a6b4f 100%);
 }
 
 /* Efeito de brilho para bijuterias */

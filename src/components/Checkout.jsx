@@ -8,9 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
+import ShippingCalculator from './ShippingCalculator';
 
 const Checkout = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
+  const [shippingCost, setShippingCost] = useState(0);
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -144,12 +146,12 @@ const Checkout = ({ isOpen, onClose }) => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Envio:</span>
-                    <span>€4,99</span>
+                    <span>{shippingCost === 0 ? 'Grátis' : `€${shippingCost.toFixed(2)}`}</span>
                   </div>
                   <Separator />
                   <div className="flex justify-between font-playfair font-bold text-lg">
                     <span>Total:</span>
-                    <span className="text-emerald-custom">€{(getCartTotal() + 4.99).toFixed(2)}</span>
+                    <span className="text-emerald-custom">€{(getCartTotal() + shippingCost).toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -282,6 +284,8 @@ const Checkout = ({ isOpen, onClose }) => {
                         />
                       </div>
                     </div>
+
+                    <ShippingCalculator onShippingChange={setShippingCost} />
 
                     <div className="flex justify-between pt-4">
                       <Button variant="outline" onClick={handlePrevStep}>

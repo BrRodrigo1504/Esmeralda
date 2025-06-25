@@ -192,20 +192,38 @@ const Footer = () => {
               <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
                 <span className="text-xs font-bold text-purple-600">SEPA</span>
               </div>
-            </div>
-            <div className="flex justify-center items-center space-x-4 text-sm text-gray-300">
+            </div>            <div className="flex justify-center items-center space-x-4 text-sm text-gray-300">
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
                   <span className="text-white text-xs">✓</span>
                 </div>
-                <span>Pagamentos 100% Seguros</span>
+                <span>Pagamentos 100% seguros</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">🔒</span>
+                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs">✓</span>
                 </div>
-                <span>Certificado SSL</span>
+                <span>SSL Certificado</span>
               </div>
+            </div>
+            
+            {/* Certificados de Segurança */}
+            <div className="flex justify-center items-center space-x-6 mt-6">
+              <img 
+                src="/ssl-secure.jpg" 
+                alt="SSL Secure" 
+                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
+              />
+              <img 
+                src="/payment-methods.png" 
+                alt="Métodos de Pagamento Seguros" 
+                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
+              />
+              <img 
+                src="/visa-mastercard.jpg" 
+                alt="Visa e Mastercard Verificados" 
+                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
+              />
             </div>
           </div>
         </motion.div>

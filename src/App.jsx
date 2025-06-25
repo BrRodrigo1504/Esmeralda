@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import Header from './components/Header';
+import PromoBars from './components/PromoBars';
 import Hero from './components/Hero';
 import Catalog from './components/Catalog';
 import HowItWorks from './components/HowItWorks';
@@ -48,6 +49,7 @@ function App() {
    return (
     <CartProvider>
       <div className="min-h-screen bg-white">
+        <PromoBars />
         <Header />
         <Hero />
         <Catalog />

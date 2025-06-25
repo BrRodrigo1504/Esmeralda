@@ -1,0 +1,9 @@
+[build]
+  command = "pnpm install && pnpm run build"
+  publish = "dist"
+
+[build.environment]
+  NPM_FLAGS = "--version"
+  NPM_VERSION = "latest"
+  PNPM_VERSION = "latest"
+
