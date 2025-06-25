@@ -22,7 +22,7 @@ function App() {
         const targetId = href.substring(1);
         const targetElement = document.getElementById(targetId);
         if (targetElement) {
-          const headerHeight = 80; // Altura do header fixo
+          const headerHeight = 128; // Altura do header fixo + barras promocionais
           const targetPosition = targetElement.offsetTop - headerHeight;
           window.scrollTo({
             top: targetPosition,
@@ -51,12 +51,14 @@ function App() {
       <div className="min-h-screen bg-white">
         <PromoBars />
         <Header />
-        <Hero />
-        <Catalog />
-        <HowItWorks />
-        <About />
-        <Contact />
-        <Footer />
+        <div className="pt-[8rem]"> {/* Espaçamento para as barras fixas */}
+          <Hero />
+          <Catalog />
+          <HowItWorks />
+          <About />
+          <Contact />
+          <Footer />
+        </div>
         <Chatbot />
         <Cart />
       </div>

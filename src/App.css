@@ -144,7 +144,7 @@
 
 /* Barras promocionais - garantir que apareçam no topo */
 .promo-bars {
-  position: relative;
+  position: fixed;
   z-index: 1000;
   top: 0;
   left: 0;
