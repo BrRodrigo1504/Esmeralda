@@ -100,7 +100,7 @@ const Checkout = ({ isOpen, onClose }) => {
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {orderComplete ? (
@@ -133,9 +133,9 @@ const Checkout = ({ isOpen, onClose }) => {
               </Button>
             </div>
           ) : (
-            <div className="flex flex-col lg:flex-row h-full">
+            <div className="flex flex-col lg:flex-row h-full min-h-0">
               {/* Resumo do pedido */}
-              <div className="lg:w-2/5 bg-gray-50 p-6 border-r">
+              <div className="lg:w-2/5 bg-gray-50 p-6 border-r flex-shrink-0 overflow-y-auto">
                 <h3 className="text-xl font-playfair font-bold mb-6">Resumo do Pedido</h3>
                 
                 <div className="space-y-4 mb-6">
@@ -203,8 +203,8 @@ const Checkout = ({ isOpen, onClose }) => {
               </div>
 
               {/* Formulário de checkout */}
-              <div className="lg:w-3/5 p-6">
-                <div className="flex items-center justify-between mb-6">
+              <div className="lg:w-3/5 flex flex-col min-h-0">
+                <div className="flex items-center justify-between p-6 border-b flex-shrink-0">
                   <h2 className="text-2xl font-playfair font-bold">Finalizar Compra</h2>
                   <Button variant="ghost" onClick={onClose}>
                     <X className="w-5 h-5" />
@@ -212,7 +212,7 @@ const Checkout = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Indicador de passos */}
-                <div className="flex items-center justify-center mb-8">
+                <div className="flex items-center justify-center py-6 border-b flex-shrink-0">
                   {[1, 2, 3].map((step) => (
                     <div key={step} className="flex items-center">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -231,166 +231,167 @@ const Checkout = ({ isOpen, onClose }) => {
                   ))}
                 </div>
 
-                {/* Passo 1: Informações pessoais */}
-                {currentStep === 1 && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-4"
-                  >
-                    <h3 className="font-playfair font-semibold text-lg mb-4">Informações Pessoais</h3>
-                    
-                    <div>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange('email', e.target.value)}
-                        placeholder="seu@email.com"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
+                {/* Conteúdo do formulário com scroll */}
+                <div className="flex-1 overflow-y-auto p-6">
+                  {/* Passo 1: Informações pessoais */}
+                  {currentStep === 1 && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="space-y-4"
+                    >
+                      <h3 className="font-playfair font-semibold text-lg mb-4">Informações Pessoais</h3>
+                      
                       <div>
-                        <Label htmlFor="firstName">Nome</Label>
+                        <Label htmlFor="email">Email</Label>
                         <Input
-                          id="firstName"
-                          value={formData.firstName}
-                          onChange={(e) => handleInputChange('firstName', e.target.value)}
-                          placeholder="João"
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          placeholder="seu@email.com"
                         />
                       </div>
-                      <div>
-                        <Label htmlFor="lastName">Sobrenome</Label>
-                        <Input
-                          id="lastName"
-                          value={formData.lastName}
-                          onChange={(e) => handleInputChange('lastName', e.target.value)}
-                          placeholder="Silva"
-                        />
-                      </div>
-                    </div>
 
-                    <div className="flex justify-end pt-4">
-                      <Button onClick={handleNextStep} className="bg-emerald-gradient hover:opacity-90">
-                        Continuar
-                      </Button>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Passo 2: Endereço de entrega */}
-                {currentStep === 2 && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-6"
-                  >
-                    <h3 className="font-playfair font-semibold text-lg mb-4">Endereço de Entrega</h3>
-                    
-                    <AddressAutocomplete
-                      onAddressChange={handleAddressChange}
-                      initialValues={shippingAddress}
-                    />
-
-                    {shippingAddress.postalCode && (
-                      <ShippingCalculator
-                        cartItems={items}
-                        destinationPostalCode={shippingAddress.postalCode}
-                        onShippingChange={handleShippingChange}
-                        className="mt-6"
-                      />
-                    )}
-
-                    <div className="flex justify-between pt-4">
-                      <Button variant="outline" onClick={handlePrevStep}>
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Voltar
-                      </Button>
-                      <Button 
-                        onClick={handleNextStep} 
-                        className="bg-emerald-gradient hover:opacity-90"
-                        disabled={!shippingAddress.postalCode || !shippingAddress.doorNumber}
-                      >
-                        Continuar
-                      </Button>
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Passo 3: Pagamento */}
-                {currentStep === 3 && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="space-y-4"
-                  >
-                    <h3 className="font-playfair font-semibold text-lg mb-4">Método de Pagamento</h3>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      {paymentMethods.map((method) => (
-                        <Card
-                          key={method.id}
-                          className={`cursor-pointer transition-all ${
-                            formData.paymentMethod === method.id
-                              ? 'ring-2 ring-emerald-custom border-emerald-custom'
-                              : 'hover:border-emerald-custom'
-                          }`}
-                          onClick={() => handleInputChange('paymentMethod', method.id)}
-                        >
-                          <CardContent className="p-4 text-center">
-                            <div className="text-2xl mb-2">{method.icon}</div>
-                            <p className="text-sm font-poppins">{method.name}</p>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-
-                    {formData.paymentMethod === 'card' && (
-                      <div className="space-y-4 mt-6">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label>Número do Cartão</Label>
-                          <Input placeholder="1234 5678 9012 3456" />
+                          <Label htmlFor="firstName">Nome</Label>
+                          <Input
+                            id="firstName"
+                            value={formData.firstName}
+                            onChange={(e) => handleInputChange('firstName', e.target.value)}
+                            placeholder="João"
+                          />
                         </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <Label>Validade</Label>
-                            <Input placeholder="MM/AA" />
-                          </div>
-                          <div>
-                            <Label>CVV</Label>
-                            <Input placeholder="123" />
-                          </div>
+                        <div>
+                          <Label htmlFor="lastName">Sobrenome</Label>
+                          <Input
+                            id="lastName"
+                            value={formData.lastName}
+                            onChange={(e) => handleInputChange('lastName', e.target.value)}
+                            placeholder="Silva"
+                          />
                         </div>
                       </div>
-                    )}
 
-                    <div className="flex justify-between pt-6">
-                      <Button variant="outline" onClick={handlePrevStep}>
-                        <ArrowLeft className="w-4 h-4 mr-2" />
-                        Voltar
-                      </Button>
-                      <Button 
-                        onClick={handlePayment} 
-                        disabled={isProcessing}
-                        className="bg-emerald-gradient hover:opacity-90"
-                      >
-                        {isProcessing ? (
-                          <>
-                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Processando...
-                          </>
-                        ) : (
-                          <>
-                            <CreditCard className="w-4 h-4 mr-2" />
-                            Finalizar Pagamento
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </motion.div>
-                )}
+                      <div className="flex justify-end pt-4">
+                        <Button onClick={handleNextStep} className="bg-emerald-gradient hover:opacity-90">
+                          Continuar
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Passo 2: Endereço de entrega */}
+                  {currentStep === 2 && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="space-y-6"
+                    >
+                      <AddressAutocomplete
+                        onAddressChange={handleAddressChange}
+                        initialValues={shippingAddress}
+                      />
+
+                      {shippingAddress.postalCode && (
+                        <ShippingCalculator
+                          cartItems={items}
+                          destinationPostalCode={shippingAddress.postalCode}
+                          onShippingChange={handleShippingChange}
+                          className="mt-6"
+                        />
+                      )}
+
+                      <div className="flex justify-between pt-4">
+                        <Button variant="outline" onClick={handlePrevStep}>
+                          <ArrowLeft className="w-4 h-4 mr-2" />
+                          Voltar
+                        </Button>
+                        <Button 
+                          onClick={handleNextStep} 
+                          className="bg-emerald-gradient hover:opacity-90"
+                          disabled={!shippingAddress.postalCode || !shippingAddress.doorNumber}
+                        >
+                          Continuar
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Passo 3: Pagamento */}
+                  {currentStep === 3 && (
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="space-y-4"
+                    >
+                      <h3 className="font-playfair font-semibold text-lg mb-4">Método de Pagamento</h3>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        {paymentMethods.map((method) => (
+                          <Card
+                            key={method.id}
+                            className={`cursor-pointer transition-all ${
+                              formData.paymentMethod === method.id
+                                ? 'ring-2 ring-emerald-custom border-emerald-custom'
+                                : 'hover:border-emerald-custom'
+                            }`}
+                            onClick={() => handleInputChange('paymentMethod', method.id)}
+                          >
+                            <CardContent className="p-4 text-center">
+                              <div className="text-2xl mb-2">{method.icon}</div>
+                              <p className="text-sm font-poppins">{method.name}</p>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+
+                      {formData.paymentMethod === 'card' && (
+                        <div className="space-y-4 mt-6">
+                          <div>
+                            <Label>Número do Cartão</Label>
+                            <Input placeholder="1234 5678 9012 3456" />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <Label>Validade</Label>
+                              <Input placeholder="MM/AA" />
+                            </div>
+                            <div>
+                              <Label>CVV</Label>
+                              <Input placeholder="123" />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex justify-between pt-6">
+                        <Button variant="outline" onClick={handlePrevStep}>
+                          <ArrowLeft className="w-4 h-4 mr-2" />
+                          Voltar
+                        </Button>
+                        <Button 
+                          onClick={handlePayment} 
+                          disabled={isProcessing}
+                          className="bg-emerald-gradient hover:opacity-90"
+                        >
+                          {isProcessing ? (
+                            <>
+                              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                              Processando...
+                            </>
+                          ) : (
+                            <>
+                              <Lock className="w-4 h-4 mr-2" />
+                              Finalizar Pedido
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
               </div>
             </div>
           )}
