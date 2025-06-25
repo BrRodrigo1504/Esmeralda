@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Menu, X, Gem } from 'lucide-react';
+import { Menu, X, Gem, Instagram, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Header = () => {
@@ -41,7 +41,29 @@ const Header = () => {
           </nav>
 
           {/* CTA Button Desktop */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Redes Sociais */}
+            <div className="flex items-center space-x-3">
+              <a
+                href="https://instagram.com/esmeralda.co"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-700 hover:text-emerald-custom transition-colors duration-300"
+                title="Instagram"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os itens da Esmeralda."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-700 hover:text-emerald-custom transition-colors duration-300"
+                title="WhatsApp"
+              >
+                <MessageCircle className="w-5 h-5" />
+              </a>
+            </div>
+            
             <Button 
               className="bg-emerald-gradient hover:opacity-90 text-white font-poppins"
               onClick={() => {
@@ -82,6 +104,29 @@ const Header = () => {
                   {item.name}
                 </a>
               ))}
+              
+              {/* Redes Sociais Mobile */}
+              <div className="flex items-center space-x-4 pt-2">
+                <a
+                  href="https://instagram.com/esmeralda.co"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-700 hover:text-emerald-custom transition-colors duration-300"
+                  title="Instagram"
+                >
+                  <Instagram className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os itens da Esmeralda."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-700 hover:text-emerald-custom transition-colors duration-300"
+                  title="WhatsApp"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                </a>
+              </div>
+              
               <Button 
                 className="bg-emerald-gradient hover:opacity-90 text-white font-poppins mt-4"
                 onClick={() => {
