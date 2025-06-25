@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Loader2, Navigation, AlertCircle } from 'lucide-react';
 
-const AddressAutocomplete = ({ 
-  onAddressChange, 
+const AddressAutocomplete = ({
+  onAddressChange,
   initialValues = {},
-  className = "" 
+  className = ""
 }) => {
   const [postalCode, setPostalCode] = useState(initialValues.postalCode || '');
   const [street, setStreet] = useState(initialValues.street || '');
@@ -32,54 +32,6 @@ const AddressAutocomplete = ({
     return postalCode; // Retorna o valor anterior se exceder 7 dígitos
   };
 
-  // Função para buscar dados do código postal
-  const fetchAddressData = async (code) => {
-    if (!code || code.length < 8) return; // Código postal completo tem 8 caracteres (XXXX-XXX)
-    
-    setLoading(true);
-    setError('');
-    
-    try {
-      // Consulta à API GEO API PT (URL corrigida)
-      const response = await fetch(`https://json.geoapi.pt/cp/${code}`);
-      
-      if (!response.ok) {
-        throw new Error('Código postal não encontrado');
-      }
-      
-      const data = await response.json();
-      
-      if (data && data.Distrito) {
-        // Extrai o nome da rua das partes do código postal
-        let streetName = '';
-        if (data.partes && data.partes.length > 0) {
-          streetName = data.partes[0].Artéria || '';
-        }
-        
-        // Preenche os campos automaticamente
-        setStreet(streetName);
-        setCity(data.Localidade || '');
-        setDistrict(data.Distrito || '');
-        
-        // Notifica o componente pai sobre a mudança
-        if (onAddressChange) {
-          onAddressChange({
-            postalCode: code,
-            street: streetName,
-            city: data.Localidade || '',
-            district: data.Distrito || '',
-            doorNumber: doorNumber
-          });
-        }
-      }
-    } catch (err) {
-      setError('Não foi possível encontrar o endereço para este código postal');
-      console.error('Erro ao buscar endereço:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   // Função para obter localização do usuário
   const getCurrentLocation = () => {
     if (!navigator.geolocation) {
@@ -96,6 +48,8 @@ const AddressAutocomplete = ({
           const { latitude, longitude } = position.coords;
           
           // Consulta a API para obter dados baseados na localização
+          // Nota: Esta API (GEO API PT) também pode ter limites de requisição.
+          // Se houver problemas, pode ser necessário remover esta funcionalidade também.
           const response = await fetch(`https://json.geoapi.pt/gps/${latitude},${longitude}`);
           
           if (!response.ok) {
@@ -108,9 +62,10 @@ const AddressAutocomplete = ({
             // Preenche automaticamente o código postal
             const formattedCP = formatPostalCode(data.CP);
             setPostalCode(formattedCP);
-            
-            // Busca dados completos do endereço
-            await fetchAddressData(formattedCP);
+            // Os outros campos (rua, cidade, distrito) precisarão ser preenchidos manualmente ou por outra API
+            setStreet('');
+            setCity('');
+            setDistrict('');
           }
         } catch (err) {
           setGeoError('Erro ao obter dados da localização');
@@ -144,18 +99,7 @@ const AddressAutocomplete = ({
     );
   };
 
-  // Efeito para buscar dados quando o código postal está completo
-  useEffect(() => {
-    if (postalCode.length === 8 && postalCode.includes('-')) {
-      const timeoutId = setTimeout(() => {
-        fetchAddressData(postalCode);
-      }, 500); // Debounce de 500ms
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, [postalCode]);
-
-  // Notifica mudanças nos campos manuais
+  // Notifica mudanças nos campos para o componente pai
   useEffect(() => {
     if (onAddressChange) {
       onAddressChange({
@@ -166,11 +110,15 @@ const AddressAutocomplete = ({
         doorNumber
       });
     }
-  }, [street, city, district, doorNumber]);
+  }, [postalCode, street, city, district, doorNumber]);
 
   const handlePostalCodeChange = (e) => {
     const formatted = formatPostalCode(e.target.value);
     setPostalCode(formatted);
+    // Limpa os campos de endereço quando o código postal é alterado
+    setStreet('');
+    setCity('');
+    setDistrict('');
   };
 
   return (
@@ -236,7 +184,7 @@ const AddressAutocomplete = ({
           type="text"
           value={street}
           onChange={(e) => setStreet(e.target.value)}
-          placeholder="Nome da rua (preenchido automaticamente)"
+          placeholder="Nome da rua (preenchido manualmente)"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
         />
       </div>
@@ -264,7 +212,7 @@ const AddressAutocomplete = ({
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          placeholder="Cidade/Vila (preenchido automaticamente)"
+          placeholder="Cidade/Vila (preenchido manualmente)"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
         />
       </div>
@@ -278,7 +226,7 @@ const AddressAutocomplete = ({
           type="text"
           value={district}
           onChange={(e) => setDistrict(e.target.value)}
-          placeholder="Distrito (preenchido automaticamente)"
+          placeholder="Distrito (preenchido manualmente)"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
         />
       </div>
@@ -291,4 +239,5 @@ const AddressAutocomplete = ({
 };
 
 export default AddressAutocomplete;
+
 

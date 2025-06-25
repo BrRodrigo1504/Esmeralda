@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, CreditCard, Truck, MapPin, User, Mail, Phone, Lock, X, Check, Shield } from 'lucide-react';
+import { ArrowLeft, CreditCard, Truck, MapPin, User, Mail, Phone, Lock, X, Check, Shield, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -34,8 +34,13 @@ const Checkout = ({ isOpen, onClose }) => {
   });
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
+  const [mbwayProcessing, setMbwayProcessing] = useState(false);
+  const [mbwayConfirmed, setMbwayConfirmed] = useState(false);
 
   const { items, getCartTotal, clearCart } = useCart();
+
+  // Número de telefone MBWay configurado
+  const MBWAY_PHONE_NUMBER = '910187321';
 
   const handleAddressChange = (address) => {
     setShippingAddress(address);
@@ -67,15 +72,35 @@ const Checkout = ({ isOpen, onClose }) => {
     }
   };
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
+  const handleMBWayPayment = async () => {
+    setMbwayProcessing(true);
     
-    // Simular processamento de pagamento
+    // Simular envio de pedido MBWay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    setMbwayProcessing(false);
+    setMbwayConfirmed(true);
+    
+    // Aguardar confirmação do usuário (simulado)
     await new Promise(resolve => setTimeout(resolve, 3000));
     
     setIsProcessing(false);
     setOrderComplete(true);
     clearCart();
+  };
+
+  const handlePayment = async () => {
+    setIsProcessing(true);
+    
+    if (formData.paymentMethod === 'mbway') {
+      await handleMBWayPayment();
+    } else {
+      // Simular processamento de pagamento para outros métodos
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      setIsProcessing(false);
+      setOrderComplete(true);
+      clearCart();
+    }
   };
 
   const paymentMethods = [
@@ -347,6 +372,7 @@ const Checkout = ({ isOpen, onClose }) => {
                         ))}
                       </div>
 
+                      {/* Formulário de cartão de crédito */}
                       {formData.paymentMethod === 'card' && (
                         <div className="space-y-4 mt-6">
                           <div>
@@ -361,6 +387,80 @@ const Checkout = ({ isOpen, onClose }) => {
                             <div>
                               <Label>CVV</Label>
                               <Input placeholder="123" />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Informações do MBWay */}
+                      {formData.paymentMethod === 'mbway' && (
+                        <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                          <div className="flex items-center space-x-3 mb-4">
+                            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                              <Smartphone className="w-5 h-5 text-blue-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-blue-900">Pagamento MB WAY</h4>
+                              <p className="text-sm text-blue-700">Pagamento rápido e seguro</p>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-4 border border-blue-200">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium text-gray-700">Número de telefone:</span>
+                              <span className="font-mono text-lg font-bold text-blue-600">{MBWAY_PHONE_NUMBER}</span>
+                            </div>
+                            <div className="flex items-center justify-between mt-2">
+                              <span className="text-sm font-medium text-gray-700">Valor a pagar:</span>
+                              <span className="text-lg font-bold text-emerald-600">€{finalTotal.toFixed(2)}</span>
+                            </div>
+                          </div>
+
+                          {mbwayProcessing && (
+                            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                              <div className="flex items-center space-x-2">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-yellow-600"></div>
+                                <span className="text-sm text-yellow-800">Enviando pedido MB WAY...</span>
+                              </div>
+                            </div>
+                          )}
+
+                          {mbwayConfirmed && !orderComplete && (
+                            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                              <div className="flex items-center space-x-2">
+                                <Check className="w-4 h-4 text-green-600" />
+                                <span className="text-sm text-green-800">
+                                  Pedido enviado! Confirme o pagamento na sua app MB WAY.
+                                </span>
+                              </div>
+                            </div>
+                          )}
+
+                          <p className="text-xs text-blue-600 mt-3">
+                            Após clicar em "Finalizar Pedido", receberá uma notificação na sua app MB WAY para confirmar o pagamento.
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Informações do Multibanco */}
+                      {formData.paymentMethod === 'multibanco' && (
+                        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                          <div className="flex items-center space-x-3 mb-4">
+                            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                              <CreditCard className="w-5 h-5 text-gray-600" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-gray-900">Referência Multibanco</h4>
+                              <p className="text-sm text-gray-700">Pague em qualquer terminal ou homebanking</p>
+                            </div>
+                          </div>
+                          
+                          <div className="bg-white rounded-lg p-4 border border-gray-200">
+                            <p className="text-sm text-gray-600 mb-2">
+                              Após confirmar o pedido, receberá uma referência Multibanco por email.
+                            </p>
+                            <div className="text-sm text-gray-500">
+                              Valor: <span className="font-bold text-emerald-600">€{finalTotal.toFixed(2)}</span>
                             </div>
                           </div>
                         </div>
@@ -382,10 +482,7 @@ const Checkout = ({ isOpen, onClose }) => {
                               Processando...
                             </>
                           ) : (
-                            <>
-                              <Lock className="w-4 h-4 mr-2" />
-                              Finalizar Pedido
-                            </>
+                            'Finalizar Pedido'
                           )}
                         </Button>
                       </div>
