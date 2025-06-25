@@ -52,7 +52,7 @@ const Footer = () => {
             
             <p className="text-gray-300 font-poppins leading-relaxed">
               Criamos bijuterias personalizadas únicas com gravação a laser de alta precisão. 
-              Transformamos suas memórias em joias que contam histórias, feitas em Portugal.
+              Transformamos as vossas memórias em joias que contam histórias, feitas em Portugal.
             </p>
             
             <div className="space-y-3">
@@ -66,7 +66,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <a
-                  href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os itens da Esmeralda."
+                  href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os artigos da Esmeralda."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-poppins text-sm flex items-center space-x-3 text-gray-300 hover:text-emerald-custom transition-colors duration-300"
@@ -180,35 +180,35 @@ const Footer = () => {
             {/* Métodos de Pagamento */}
             <div className="text-center md:text-left">
               <h3 className="text-lg font-playfair font-semibold mb-6 text-emerald-custom">
-                Métodos de Pagamento Aceitos
+                Métodos de Pagamento Aceites
               </h3>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-6">
                 {/* Cartões de Crédito */}
-                <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">VISA</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/visa.png" alt="Visa" className="h-8 object-contain" />
                 </div>
-                <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">MASTER</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/mastercard.png" alt="Mastercard" className="h-8 object-contain" />
                 </div>
-                <div className="bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">AMEX</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/amex.png" alt="American Express" className="h-8 object-contain" />
                 </div>
                 
                 {/* Métodos portugueses */}
-                <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">MB WAY</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/mbway.png" alt="MB WAY" className="h-8 object-contain" />
                 </div>
-                <div className="bg-gradient-to-br from-blue-700 to-blue-800 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">MULTIBANCO</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/multibanco.png" alt="Multibanco" className="h-8 object-contain" />
                 </div>
-                <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">PayPal</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/paypal.png" alt="PayPal" className="h-8 object-contain" />
                 </div>
-                <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">SEPA</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/sepa.png" alt="SEPA" className="h-8 object-contain" />
                 </div>
-                <div className="bg-gradient-to-br from-orange-600 to-orange-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
-                  <span className="text-xs font-bold text-white">PAYSHOP</span>
+                <div className="bg-white rounded-lg p-2 flex items-center justify-center h-12 shadow-lg">
+                  <img src="/payment_methods/payshop.png" alt="PayShop" className="h-8 object-contain" />
                 </div>
               </div>
               
@@ -310,11 +310,11 @@ const Footer = () => {
             <div className="flex max-w-md mx-auto">
               <input
                 type="email"
-                placeholder="Seu melhor email"
+                placeholder="O vosso melhor email"
                 className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-l-lg focus:outline-none focus:border-emerald-custom font-poppins text-sm"
               />
               <button className="px-6 py-2 bg-emerald-gradient hover:opacity-90 rounded-r-lg font-poppins text-sm font-medium transition-opacity duration-300">
-                Inscrever
+                Subscrever
               </button>
             </div>
           </div>
@@ -331,7 +331,7 @@ const Footer = () => {
             <div className="flex items-center space-x-1 text-gray-400 font-poppins text-sm">
               <span>Feito com</span>
               <Heart className="w-4 h-4 text-emerald-custom" />
-              <span>para você</span>
+              <span>para vós</span>
             </div>
           </div>
         </div>

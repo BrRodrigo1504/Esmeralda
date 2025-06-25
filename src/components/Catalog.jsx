@@ -180,9 +180,9 @@ const Catalog = () => {
           <h2 className="text-4xl lg:text-5xl font-playfair font-bold text-gray-900 mb-4">
             Nosso <span className="text-emerald-custom">Catálogo</span>
           </h2>
-          <p className="text-lg text-gray-600 font-poppins max-w-2xl mx-auto">
-            Descubra nossa coleção exclusiva de bijuterias personalizadas. 
-            Cada peça é única e criada especialmente para você.
+          <p className="text-lg text-gray-600 font-poppins">
+            Descubra a nossa colecção exclusiva de bijuterias personalizadas. 
+            Cada peça é única e criada especialmente para vós.
           </p>
         </motion.div>
 

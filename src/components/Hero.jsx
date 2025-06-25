@@ -42,9 +42,9 @@ const Hero = () => {
                 transition={{ delay: 0.6, duration: 0.6 }}
                 className="text-lg text-gray-600 font-poppins leading-relaxed"
               >
-                Transforme suas memórias mais preciosas em joias únicas. 
+                Transforme as vossas memórias mais preciosas em joias únicas. 
                 Criamos bijuterias personalizadas com gravação a laser de alta precisão, 
-                perfeitas para presentear ou se presentear.
+                perfeitas para oferecer ou vos presenteardes.
               </motion.p>
             </div>
 
