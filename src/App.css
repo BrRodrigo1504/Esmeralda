@@ -142,6 +142,15 @@
   border-color: #015443;
 }
 
+/* Barras promocionais - garantir que apareçam no topo */
+.promo-bars {
+  position: relative;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 /* Animações customizadas */
 .fade-in {
   animation: fadeIn 0.8s ease-in-out;

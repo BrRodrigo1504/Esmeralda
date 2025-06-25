@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Gem, Mail, Phone, MapPin, Instagram, Facebook, Heart } from 'lucide-react';
+import { Gem, Mail, Phone, MapPin, Instagram, Facebook, Heart, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -62,7 +62,18 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <Phone className="w-4 h-4 text-emerald-custom" />
-                <span className="font-poppins text-sm">+351 912 345 678</span>
+                <span className="font-poppins text-sm">+351 939 053 105</span>
+              </div>
+              <div className="flex items-center space-x-3 text-gray-300">
+                <a
+                  href="https://wa.me/351939053105?text=Olá! Tenho interesse em conhecer melhor os itens da Esmeralda."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-poppins text-sm flex items-center space-x-3 text-gray-300 hover:text-emerald-custom transition-colors duration-300"
+                >
+                  <MessageCircle className="w-4 h-4 text-emerald-custom" />
+                  <span>Iniciar conversa no WhatsApp</span>
+                </a>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
                 <MapPin className="w-4 h-4 text-emerald-custom" />
@@ -157,7 +168,7 @@ const Footer = () => {
           </motion.div>
         </div>
 
-        {/* Métodos de Pagamento */}
+        {/* Métodos de Pagamento e Segurança */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -165,65 +176,116 @@ const Footer = () => {
           viewport={{ once: true }}
           className="mt-12 pt-8 border-t border-gray-800"
         >
-          <div className="text-center">
-            <h3 className="text-lg font-playfair font-semibold mb-6">Métodos de Pagamento Aceitos</h3>
-            <div className="flex flex-wrap justify-center items-center gap-4 mb-6">
-              {/* Cartões de Crédito */}
-              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
-                <span className="text-xs font-bold text-blue-600">VISA</span>
-              </div>
-              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
-                <span className="text-xs font-bold text-red-600">MASTERCARD</span>
-              </div>
-              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
-                <span className="text-xs font-bold text-blue-800">AMEX</span>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Métodos de Pagamento */}
+            <div className="text-center md:text-left">
+              <h3 className="text-lg font-playfair font-semibold mb-6 text-emerald-custom">
+                Métodos de Pagamento Aceitos
+              </h3>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-6">
+                {/* Cartões de Crédito */}
+                <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">VISA</span>
+                </div>
+                <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">MASTER</span>
+                </div>
+                <div className="bg-gradient-to-br from-blue-800 to-blue-900 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">AMEX</span>
+                </div>
+                
+                {/* Métodos portugueses */}
+                <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">MB WAY</span>
+                </div>
+                <div className="bg-gradient-to-br from-blue-700 to-blue-800 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">MULTIBANCO</span>
+                </div>
+                <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">PayPal</span>
+                </div>
+                <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">SEPA</span>
+                </div>
+                <div className="bg-gradient-to-br from-orange-600 to-orange-700 rounded-lg p-3 flex items-center justify-center h-12 shadow-lg">
+                  <span className="text-xs font-bold text-white">PAYSHOP</span>
+                </div>
               </div>
               
-              {/* Métodos portugueses */}
-              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
-                <span className="text-xs font-bold text-green-600">MB WAY</span>
-              </div>
-              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
-                <span className="text-xs font-bold text-blue-700">MULTIBANCO</span>
-              </div>
-              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
-                <span className="text-xs font-bold text-blue-600">PayPal</span>
-              </div>
-              <div className="bg-white rounded-lg p-3 flex items-center justify-center min-w-[60px] h-10">
-                <span className="text-xs font-bold text-purple-600">SEPA</span>
-              </div>
-            </div>            <div className="flex justify-center items-center space-x-4 text-sm text-gray-300">
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
-                <span>Pagamentos 100% seguros</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">✓</span>
-                </div>
-                <span>SSL Certificado</span>
-              </div>
+              <p className="text-gray-400 font-poppins text-sm">
+                Todos os pagamentos são processados de forma segura através de gateways certificados em Portugal.
+              </p>
             </div>
-            
+
             {/* Certificados de Segurança */}
-            <div className="flex justify-center items-center space-x-6 mt-6">
-              <img 
-                src="/ssl-secure.jpg" 
-                alt="SSL Secure" 
-                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
-              />
-              <img 
-                src="/payment-methods.png" 
-                alt="Métodos de Pagamento Seguros" 
-                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
-              />
-              <img 
-                src="/visa-mastercard.jpg" 
-                alt="Visa e Mastercard Verificados" 
-                className="h-12 object-contain opacity-80 hover:opacity-100 transition-opacity"
-              />
+            <div className="text-center md:text-left">
+              <h3 className="text-lg font-playfair font-semibold mb-6 text-emerald-custom">
+                Segurança e Certificações
+              </h3>
+              
+              <div className="space-y-4 mb-6">
+                <div className="flex items-center justify-center md:justify-start space-x-3">
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                  <div className="text-left">
+                    <p className="font-poppins font-medium text-white">Certificado SSL 256-bit</p>
+                    <p className="text-gray-400 text-xs">Dados protegidos com criptografia militar</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-center md:justify-start space-x-3">
+                  <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                  <div className="text-left">
+                    <p className="font-poppins font-medium text-white">PCI DSS Compliance</p>
+                    <p className="text-gray-400 text-xs">Padrão internacional para pagamentos</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-center md:justify-start space-x-3">
+                  <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                  <div className="text-left">
+                    <p className="font-poppins font-medium text-white">RGPD Compliance</p>
+                    <p className="text-gray-400 text-xs">Proteção de dados pessoais na UE</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-center md:justify-start space-x-3">
+                  <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg">
+                    <span className="text-white text-sm font-bold">✓</span>
+                  </div>
+                  <div className="text-left">
+                    <p className="font-poppins font-medium text-white">Garantia de Reembolso</p>
+                    <p className="text-gray-400 text-xs">30 dias para trocas e devoluções</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Selos de Confiança */}
+              <div className="flex justify-center md:justify-start items-center space-x-4">
+                <div className="bg-gray-800 rounded-lg p-2 border border-gray-700">
+                  <div className="text-xs text-center">
+                    <div className="text-green-400 font-bold">🔒 SSL</div>
+                    <div className="text-gray-400">SECURE</div>
+                  </div>
+                </div>
+                <div className="bg-gray-800 rounded-lg p-2 border border-gray-700">
+                  <div className="text-xs text-center">
+                    <div className="text-blue-400 font-bold">🛡️ PCI</div>
+                    <div className="text-gray-400">CERTIFIED</div>
+                  </div>
+                </div>
+                <div className="bg-gray-800 rounded-lg p-2 border border-gray-700">
+                  <div className="text-xs text-center">
+                    <div className="text-purple-400 font-bold">🇪🇺 RGPD</div>
+                    <div className="text-gray-400">COMPLIANT</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>

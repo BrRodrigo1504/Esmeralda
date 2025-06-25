@@ -3,7 +3,7 @@ import { Truck, Gift } from 'lucide-react';
 
 const PromoBars = () => {
   return (
-    <div className="w-full">
+    <div className="w-full promo-bars">
       {/* Barra de Frete Grátis */}
       <div className="bg-[#7A8C89] text-white py-2 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-center space-x-2 text-sm font-poppins">
