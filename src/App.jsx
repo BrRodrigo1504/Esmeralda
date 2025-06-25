@@ -9,6 +9,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Chatbot from './components/ChatbotNew';
 import Cart from './components/Cart';
+import PaymentCheckout from './components/PaymentCheckout';
 import { CartProvider } from './contexts/CartContext';
 import './App.css';
 

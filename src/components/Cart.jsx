@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
-import Checkout from './Checkout';
+import PaymentCheckout from './PaymentCheckout';
 
 const Cart = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -208,7 +208,7 @@ const Cart = () => {
       </AnimatePresence>
 
       {/* Componente de Checkout */}
-      <Checkout 
+      <PaymentCheckout 
         isOpen={isCheckoutOpen} 
         onClose={() => setIsCheckoutOpen(false)} 
       />
