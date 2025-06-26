@@ -36,6 +36,7 @@ const Checkout = ({ isOpen, onClose }) => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [mbwayProcessing, setMbwayProcessing] = useState(false);
   const [mbwayConfirmed, setMbwayConfirmed] = useState(false);
+  const [multibancoData, setMultibancoData] = useState(null);
 
   const { items, getCartTotal, clearCart } = useCart();
 
@@ -44,39 +45,52 @@ const Checkout = ({ isOpen, onClose }) => {
 
   const sendPurchaseEmail = async () => {
     try {
-      const orderNumber = `ESM${Date.now()}`;
-      const itemsList = items.map(item => 
-        `• ${item.name} (Qtd: ${item.quantity}) - ${item.price}${item.customization ? `\n  Personalização: ${item.customization}` : ''}`
-      ).join('\n');
+      const orderData = {
+        customer: {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email
+        },
+        items: items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          customization: item.customization || ''
+        })),
+        total: finalTotal,
+        shipping_cost: finalShippingCost,
+        discount: 0,
+        shipping_address: {
+          street: shippingAddress.street,
+          door_number: shippingAddress.doorNumber,
+          postal_code: shippingAddress.postalCode,
+          city: shippingAddress.city,
+          district: shippingAddress.district,
+          country: 'Portugal'
+        },
+        payment_method: formData.paymentMethod
+      };
 
-      const formDataToSend = new FormData();
-      formDataToSend.append('_replyto', formData.email);
-      formDataToSend.append('_subject', `🛍️ Nova Compra Confirmada - Pedido #${orderNumber}`);
-      formDataToSend.append('Número do Pedido', orderNumber);
-      formDataToSend.append('Nome do Cliente', `${formData.firstName} ${formData.lastName}`);
-      formDataToSend.append('Email do Cliente', formData.email);
-      formDataToSend.append('Endereço de Entrega', `${shippingAddress.street}, ${shippingAddress.doorNumber}\n${shippingAddress.city}, ${shippingAddress.postalCode}\nPortugal`);
-      formDataToSend.append('Método de Pagamento', formData.paymentMethod === 'card' ? 'Cartão de Crédito/Débito' : 
-                                                   formData.paymentMethod === 'mbway' ? 'MB WAY' :
-                                                   formData.paymentMethod === 'multibanco' ? 'Multibanco' : 'PayPal');
-      formDataToSend.append('Itens do Pedido', itemsList);
-      formDataToSend.append('Subtotal', `€${subtotal.toFixed(2)}`);
-      formDataToSend.append('Frete', finalShippingCost === 0 ? "Grátis" : `€${finalShippingCost.toFixed(2)}`);
-      formDataToSend.append('Total', `€${finalTotal.toFixed(2)}`);
-      formDataToSend.append('Mensagem', `🎉 Nova compra confirmada!\n\nCliente: ${formData.firstName} ${formData.lastName} (${formData.email})\nPedido: #${orderNumber}\nTotal: €${finalTotal.toFixed(2)}\n\nPor favor, processe este pedido e entre em contato com o cliente para confirmar os detalhes da personalização.`);
-
-      const response = await fetch("https://formsubmit.co/rodrigoitdev@gmail.com", {
-        method: "POST",
-        body: formDataToSend
+      const response = await fetch('http://localhost:5000/api/email/send-order-confirmation', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderData)
       });
 
-      if (response.ok) {
-        console.log("Email de compra enviado com sucesso!");
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log('Email enviado com sucesso!', result);
+        // Armazenar dados do Multibanco se necessário
+        if (result.multibanco_reference) {
+          setMultibancoData(result.multibanco_reference);
+        }
       } else {
-        console.error("Erro ao enviar email de compra:", response.statusText);
+        console.error('Erro ao enviar email:', result.error);
       }
     } catch (error) {
-      console.error("Erro ao enviar email de compra:", error);
+      console.error('Erro ao enviar email:', error);
     }
   };
 
@@ -187,6 +201,16 @@ const Checkout = ({ isOpen, onClose }) => {
               <p className="text-gray-600 font-poppins mb-6">
                 Obrigado pela sua compra! Receberá um email de confirmação em breve.
               </p>
+              {multibancoData && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left">
+                  <p className="font-semibold text-blue-800 mb-2">Dados para Pagamento Multibanco:</p>
+                  <p className="text-sm text-blue-700">Entidade: <span className="font-mono font-bold">{multibancoData.entity}</span></p>
+                  <p className="text-sm text-blue-700">Referência: <span className="font-mono font-bold">{multibancoData.reference}</span></p>
+                  <p className="text-sm text-blue-700">Valor: <span className="font-mono font-bold">€{multibancoData.amount}</span></p>
+                  <p className="text-sm text-blue-700">Válido até: <span className="font-mono font-bold">{multibancoData.expiry_date}</span></p>
+                  <p className="text-xs text-blue-600 mt-2">Use estes dados para pagar em qualquer caixa Multibanco ou homebanking.</p>
+                </div>
+              )}
               <div className="bg-gray-50 rounded-lg p-4 mb-6">
                 <p className="text-sm text-gray-600 font-poppins">
                   Número do pedido: <span className="font-semibold">#ESM{Date.now()}</span>
