@@ -9,5 +9,17 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-  </body>
+  
+<section id="orcamento" style="padding: 2rem; background-color: #f9f9f9;">
+  <h2 style="color: #2e7d32;">Solicitar Orçamento</h2>
+  <form action="https://formsubmit.co/rodrigoitdev@gmail.com" method="POST" style="display: flex; flex-direction: column; max-width: 500px;">
+    <input type="text" name="name" placeholder="Seu nome" required style="margin-bottom: 1rem; padding: 0.5rem;" />
+    <input type="email" name="email" placeholder="Seu email" required style="margin-bottom: 1rem; padding: 0.5rem;" />
+    <textarea name="message" placeholder="Descreva a bijuteria desejada..." required style="margin-bottom: 1rem; padding: 0.5rem;"></textarea>
+    <input type="hidden" name="_captcha" value="false">
+    <button type="submit" style="background-color: #2e7d32; color: white; padding: 0.75rem; border: none; cursor: pointer;">Enviar</button>
+  </form>
+</section>
+
+</body>
 </html>
