@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, CheckCircle, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,10 +13,12 @@ const Contact = () => {
     nome: '',
     email: '',
     produto: '',
-    personalizacao: ''
+    personalizacao: '',
+    foto: null
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [fotoPreview, setFotoPreview] = useState(null);
 
   const produtos = [
     'Colar com Foto Personalizada',
@@ -45,24 +47,53 @@ const Contact = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData(prev => ({
+        ...prev,
+        foto: file
+      }));
+      
+      // Criar preview da imagem
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setFotoPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeFoto = () => {
+    setFormData(prev => ({
+      ...prev,
+      foto: null
+    }));
+    setFotoPreview(null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simular envio do formulário
     try {
+      // Usar FormData para enviar arquivo
+      const formDataToSend = new FormData();
+      formDataToSend.append('_replyto', formData.email);
+      formDataToSend.append('_subject', `Novo Orçamento - ${formData.produto}`);
+      formDataToSend.append('Nome Completo', formData.nome);
+      formDataToSend.append('Email do Cliente', formData.email);
+      formDataToSend.append('Produto Desejado', formData.produto);
+      formDataToSend.append('Personalização/Gravação Desejada', formData.personalizacao);
+      formDataToSend.append('Mensagem', `Um novo orçamento foi solicitado por ${formData.nome} (${formData.email}) para o produto ${formData.produto}. Detalhes da personalização: ${formData.personalizacao}`);
+      
+      if (formData.foto) {
+        formDataToSend.append('Foto de Referência', formData.foto);
+      }
+
       const response = await fetch("https://formsubmit.co/rodrigoitdev@gmail.com", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          _replyto: formData.email,
-          Nome: formData.nome,
-          Produto: formData.produto,
-          Personalizacao: formData.personalizacao
-        })
+        body: formDataToSend
       });
 
       if (response.ok) {
@@ -77,8 +108,10 @@ const Contact = () => {
         nome: "",
         email: "",
         produto: "",
-        personalizacao: ""
+        personalizacao: "",
+        foto: null
       });
+      setFotoPreview(null);
     } catch (error) {
       console.error("Erro ao enviar formulário:", error);
     } finally {
@@ -226,6 +259,53 @@ const Contact = () => {
                         className="font-poppins min-h-[120px]"
                         placeholder="Descreva detalhadamente a personalização que deseja: texto, imagem, símbolos, etc. Quanto mais detalhes, melhor será nosso orçamento!"
                       />
+                    </div>
+
+                    {/* Campo de Upload de Foto */}
+                    <div className="space-y-2">
+                      <Label className="font-poppins">Foto de Referência (Opcional)</Label>
+                      <p className="text-sm text-gray-500 font-poppins">
+                        Envie uma foto de referência para ajudar na personalização
+                      </p>
+                      
+                      {!fotoPreview ? (
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-emerald-custom transition-colors">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                            id="foto-upload"
+                          />
+                          <label
+                            htmlFor="foto-upload"
+                            className="cursor-pointer flex flex-col items-center space-y-2"
+                          >
+                            <Upload className="w-8 h-8 text-gray-400" />
+                            <span className="text-sm font-poppins text-gray-600">
+                              Clique para enviar uma foto
+                            </span>
+                            <span className="text-xs font-poppins text-gray-400">
+                              PNG, JPG até 10MB
+                            </span>
+                          </label>
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <img
+                            src={fotoPreview}
+                            alt="Preview"
+                            className="w-full h-32 object-cover rounded-lg"
+                          />
+                          <button
+                            type="button"
+                            onClick={removeFoto}
+                            className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <Button

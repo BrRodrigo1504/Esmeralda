@@ -46,30 +46,28 @@ const Checkout = ({ isOpen, onClose }) => {
     try {
       const orderNumber = `ESM${Date.now()}`;
       const itemsList = items.map(item => 
-        `${item.name} (Qtd: ${item.quantity}) - ${item.price}${item.customization ? ` - ${item.customization}` : ''}`
+        `• ${item.name} (Qtd: ${item.quantity}) - ${item.price}${item.customization ? `\n  Personalização: ${item.customization}` : ''}`
       ).join('\n');
 
-      const emailData = {
-        _replyto: formData.email,
-        _subject: `Nova Compra - Pedido #${orderNumber}`,
-        "Número do Pedido": orderNumber,
-        "Nome do Cliente": `${formData.firstName} ${formData.lastName}`,
-        "Email do Cliente": formData.email,
-        "Endereço de Entrega": `${shippingAddress.street}, ${shippingAddress.doorNumber}, ${shippingAddress.city}, ${shippingAddress.postalCode}`,
-        "Método de Pagamento": formData.paymentMethod,
-        "Itens do Pedido": itemsList,
-        "Subtotal": `€${subtotal.toFixed(2)}`,
-        "Frete": finalShippingCost === 0 ? "Grátis" : `€${finalShippingCost.toFixed(2)}`,
-        "Total": `€${finalTotal.toFixed(2)}`
-      };
+      const formDataToSend = new FormData();
+      formDataToSend.append('_replyto', formData.email);
+      formDataToSend.append('_subject', `🛍️ Nova Compra Confirmada - Pedido #${orderNumber}`);
+      formDataToSend.append('Número do Pedido', orderNumber);
+      formDataToSend.append('Nome do Cliente', `${formData.firstName} ${formData.lastName}`);
+      formDataToSend.append('Email do Cliente', formData.email);
+      formDataToSend.append('Endereço de Entrega', `${shippingAddress.street}, ${shippingAddress.doorNumber}\n${shippingAddress.city}, ${shippingAddress.postalCode}\nPortugal`);
+      formDataToSend.append('Método de Pagamento', formData.paymentMethod === 'card' ? 'Cartão de Crédito/Débito' : 
+                                                   formData.paymentMethod === 'mbway' ? 'MB WAY' :
+                                                   formData.paymentMethod === 'multibanco' ? 'Multibanco' : 'PayPal');
+      formDataToSend.append('Itens do Pedido', itemsList);
+      formDataToSend.append('Subtotal', `€${subtotal.toFixed(2)}`);
+      formDataToSend.append('Frete', finalShippingCost === 0 ? "Grátis" : `€${finalShippingCost.toFixed(2)}`);
+      formDataToSend.append('Total', `€${finalTotal.toFixed(2)}`);
+      formDataToSend.append('Mensagem', `🎉 Nova compra confirmada!\n\nCliente: ${formData.firstName} ${formData.lastName} (${formData.email})\nPedido: #${orderNumber}\nTotal: €${finalTotal.toFixed(2)}\n\nPor favor, processe este pedido e entre em contato com o cliente para confirmar os detalhes da personalização.`);
 
       const response = await fetch("https://formsubmit.co/rodrigoitdev@gmail.com", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(emailData)
+        body: formDataToSend
       });
 
       if (response.ok) {
@@ -135,19 +133,16 @@ const Checkout = ({ isOpen, onClose }) => {
   const handlePayment = async () => {
     setIsProcessing(true);
     
-    if (formData.paymentMethod === 'mbway') {
-      await handleMBWayPayment();
-    } else {
-      // Simular processamento de pagamento para outros métodos
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      // Enviar email de confirmação de compra
-      await sendPurchaseEmail();
-      
-      setIsProcessing(false);
-      setOrderComplete(true);
-      clearCart();
-    }
+    // Simular processamento de pagamento para todos os métodos
+    // Aqui você pode integrar com uma plataforma de pagamento real no futuro
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Enviar email de confirmação de compra
+    await sendPurchaseEmail();
+    
+    setIsProcessing(false);
+    setOrderComplete(true);
+    clearCart();
   };
 
   const paymentMethods = [
