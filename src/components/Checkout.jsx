@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import AddressAutocomplete from './AddressAutocomplete';
 import ShippingCalculator from './ShippingCalculator';
+import { generateInvoicePDF, generateMultibancoReference } from '../services/InvoiceService';
 
 const Checkout = ({ isOpen, onClose }) => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -45,38 +46,141 @@ const Checkout = ({ isOpen, onClose }) => {
   const sendPurchaseEmail = async () => {
     try {
       const orderNumber = `ESM${Date.now()}`;
+      const multibancoRef = generateMultibancoReference();
+      
+      // Preparar dados para o PDF
+      const orderData = {
+        orderNumber,
+        customerName: `${formData.firstName} ${formData.lastName}`,
+        customerEmail: formData.email,
+        shippingAddress: `${shippingAddress.street}, ${shippingAddress.doorNumber}\n${shippingAddress.city}, ${shippingAddress.postalCode}\nPortugal`,
+        items: items.map(item => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          customization: item.customization
+        })),
+        subtotal: subtotal.toFixed(2),
+        shipping: finalShippingCost.toFixed(2),
+        total: finalTotal.toFixed(2),
+        paymentMethod: formData.paymentMethod,
+        multibancoRef: multibancoRef
+      };
+
+      // Gerar PDF da fatura
+      const invoicePDF = generateInvoicePDF(orderData);
+      const pdfBlob = invoicePDF.output('blob');
+
+      // 1. Enviar e-mail para o lojista (rodrigoitdev@gmail.com)
       const itemsList = items.map(item => 
         `• ${item.name} (Qtd: ${item.quantity}) - ${item.price}${item.customization ? `\n  Personalização: ${item.customization}` : ''}`
       ).join('\n');
 
-      const formDataToSend = new FormData();
-      formDataToSend.append('_replyto', formData.email);
-      formDataToSend.append('_subject', `🛍️ Nova Compra Confirmada - Pedido #${orderNumber}`);
-      formDataToSend.append('Número do Pedido', orderNumber);
-      formDataToSend.append('Nome do Cliente', `${formData.firstName} ${formData.lastName}`);
-      formDataToSend.append('Email do Cliente', formData.email);
-      formDataToSend.append('Endereço de Entrega', `${shippingAddress.street}, ${shippingAddress.doorNumber}\n${shippingAddress.city}, ${shippingAddress.postalCode}\nPortugal`);
-      formDataToSend.append('Método de Pagamento', formData.paymentMethod === 'card' ? 'Cartão de Crédito/Débito' : 
+      const formDataToOwner = new FormData();
+      formDataToOwner.append('_replyto', formData.email);
+      formDataToOwner.append('_subject', `🛍️ Nova Compra Confirmada - Pedido #${orderNumber}`);
+      formDataToOwner.append('Número do Pedido', orderNumber);
+      formDataToOwner.append('Nome do Cliente', `${formData.firstName} ${formData.lastName}`);
+      formDataToOwner.append('Email do Cliente', formData.email);
+      formDataToOwner.append('Telefone do Cliente', formData.phone);
+      formDataToOwner.append('Endereço de Entrega', `${shippingAddress.street}, ${shippingAddress.doorNumber}\n${shippingAddress.city}, ${shippingAddress.postalCode}\nPortugal`);
+      formDataToOwner.append('Método de Pagamento', formData.paymentMethod === 'card' ? 'Cartão de Crédito/Débito' : 
                                                    formData.paymentMethod === 'mbway' ? 'MB WAY' :
                                                    formData.paymentMethod === 'multibanco' ? 'Multibanco' : 'PayPal');
-      formDataToSend.append('Itens do Pedido', itemsList);
-      formDataToSend.append('Subtotal', `€${subtotal.toFixed(2)}`);
-      formDataToSend.append('Frete', finalShippingCost === 0 ? "Grátis" : `€${finalShippingCost.toFixed(2)}`);
-      formDataToSend.append('Total', `€${finalTotal.toFixed(2)}`);
-      formDataToSend.append('Mensagem', `🎉 Nova compra confirmada!\n\nCliente: ${formData.firstName} ${formData.lastName} (${formData.email})\nPedido: #${orderNumber}\nTotal: €${finalTotal.toFixed(2)}\n\nPor favor, processe este pedido e entre em contato com o cliente para confirmar os detalhes da personalização.`);
+      if (formData.paymentMethod === 'multibanco') {
+        formDataToOwner.append('Referência Multibanco', `Entidade: 12345 | Referência: ${multibancoRef} | Valor: €${finalTotal.toFixed(2)}`);
+      }
+      formDataToOwner.append('Itens do Pedido', itemsList);
+      formDataToOwner.append('Subtotal', `€${subtotal.toFixed(2)}`);
+      formDataToOwner.append('Frete', finalShippingCost === 0 ? "Grátis" : `€${finalShippingCost.toFixed(2)}`);
+      formDataToOwner.append('Total', `€${finalTotal.toFixed(2)}`);
+      formDataToOwner.append('Mensagem', `🎉 Nova compra confirmada!\n\nCliente: ${formData.firstName} ${formData.lastName} (${formData.email})\nPedido: #${orderNumber}\nTotal: €${finalTotal.toFixed(2)}\n\nPor favor, processe este pedido e entre em contato com o cliente para confirmar os detalhes da personalização.`);
 
-      const response = await fetch("https://formsubmit.co/rodrigoitdev@gmail.com", {
+      await fetch("https://formsubmit.co/rodrigoitdev@gmail.com", {
         method: "POST",
-        body: formDataToSend
+        body: formDataToOwner
       });
 
-      if (response.ok) {
-        console.log("Email de compra enviado com sucesso!");
-      } else {
-        console.error("Erro ao enviar email de compra:", response.statusText);
-      }
+      // 2. Enviar e-mail de confirmação para o cliente
+      const formDataToCustomer = new FormData();
+      formDataToCustomer.append('_subject', `✅ Confirmação do Pedido #${orderNumber} - Esmeralda Bijuterias`);
+      formDataToCustomer.append('_template', 'table');
+      formDataToCustomer.append('_captcha', 'false');
+      
+      // Criar conteúdo HTML estilizado para o cliente
+      const customerEmailContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+          <div style="background: linear-gradient(135deg, #008060 0%, #00a076 100%); padding: 30px; text-align: center;">
+            <h1 style="color: white; margin: 0; font-size: 28px;">💎 ESMERALDA</h1>
+            <p style="color: white; margin: 5px 0 0 0; font-size: 14px;">Bijuterias Personalizadas com Gravação a Laser</p>
+          </div>
+          
+          <div style="padding: 30px; background-color: #f8f9fa;">
+            <h2 style="color: #008060; margin-top: 0;">✅ Pedido Confirmado!</h2>
+            <p style="color: #333; font-size: 16px;">Olá <strong>${formData.firstName}</strong>,</p>
+            <p style="color: #333;">Obrigado pela sua compra! O seu pedido foi confirmado com sucesso.</p>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #008060;">
+              <h3 style="color: #008060; margin-top: 0;">📋 Detalhes do Pedido</h3>
+              <p><strong>Número do Pedido:</strong> #${orderNumber}</p>
+              <p><strong>Data:</strong> ${new Date().toLocaleDateString('pt-PT')}</p>
+              <p><strong>Total:</strong> €${finalTotal.toFixed(2)}</p>
+            </div>
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="color: #008060; margin-top: 0;">🛍️ Itens do Pedido</h3>
+              ${items.map(item => `
+                <div style="border-bottom: 1px solid #eee; padding: 10px 0;">
+                  <p style="margin: 0; font-weight: bold;">${item.name}</p>
+                  <p style="margin: 5px 0; color: #666;">Quantidade: ${item.quantity} | Preço: ${item.price}</p>
+                  ${item.customization ? `<p style="margin: 5px 0; color: #008060; font-style: italic;">Personalização: ${item.customization}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+            
+            ${formData.paymentMethod === 'multibanco' ? `
+            <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid #ffeaa7;">
+              <h3 style="color: #856404; margin-top: 0;">💳 Dados para Pagamento - Multibanco</h3>
+              <p style="margin: 5px 0;"><strong>Entidade:</strong> 12345</p>
+              <p style="margin: 5px 0;"><strong>Referência:</strong> ${multibancoRef}</p>
+              <p style="margin: 5px 0;"><strong>Valor:</strong> €${finalTotal.toFixed(2)}</p>
+              <p style="margin: 5px 0;"><strong>Validade:</strong> 3 dias</p>
+              <p style="margin: 15px 0 5px 0; font-style: italic; color: #856404;">Após o pagamento, o seu pedido será processado automaticamente.</p>
+            </div>
+            ` : ''}
+            
+            <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="color: #008060; margin-top: 0;">🚚 Endereço de Entrega</h3>
+              <p style="margin: 0;">${formData.firstName} ${formData.lastName}</p>
+              <p style="margin: 0;">${shippingAddress.street}, ${shippingAddress.doorNumber}</p>
+              <p style="margin: 0;">${shippingAddress.city}, ${shippingAddress.postalCode}</p>
+              <p style="margin: 0;">Portugal</p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <p style="color: #666;">Em anexo encontra a fatura detalhada do seu pedido.</p>
+              <p style="color: #666;">Entrega estimada: 5-7 dias úteis</p>
+            </div>
+            
+            <div style="background: #008060; color: white; padding: 20px; border-radius: 8px; text-align: center;">
+              <p style="margin: 0; font-size: 16px;">Obrigado por escolher a Esmeralda!</p>
+              <p style="margin: 5px 0 0 0; font-size: 14px;">Para dúvidas: contato@esmeralda.pt | +351 939 053 105</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      formDataToCustomer.append('Conteúdo', customerEmailContent);
+      formDataToCustomer.append('invoice', pdfBlob, `fatura_${orderNumber}.pdf`);
+
+      await fetch(`https://formsubmit.co/${formData.email}`, {
+        method: "POST",
+        body: formDataToCustomer
+      });
+
+      console.log("E-mails enviados com sucesso!");
     } catch (error) {
-      console.error("Erro ao enviar email de compra:", error);
+      console.error("Erro ao enviar e-mails:", error);
     }
   };
 
