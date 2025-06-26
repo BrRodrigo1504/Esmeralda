@@ -51,21 +51,36 @@ const Contact = () => {
 
     // Simular envio do formulário
     try {
-      // Aqui seria integrado com um serviço de email real
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      console.log('Dados do formulário:', formData);
-      setIsSubmitted(true);
+      const response = await fetch("https://formsubmit.co/rodrigoitdev@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          _replyto: formData.email,
+          Nome: formData.nome,
+          Produto: formData.produto,
+          Personalizacao: formData.personalizacao
+        })
+      });
+
+      if (response.ok) {
+        console.log("Dados do formulário enviados com sucesso!");
+        setIsSubmitted(true);
+      } else {
+        console.error("Erro ao enviar formulário:", response.statusText);
+      }
       
       // Reset form
       setFormData({
-        nome: '',
-        email: '',
-        produto: '',
-        personalizacao: ''
+        nome: "",
+        email: "",
+        produto: "",
+        personalizacao: ""
       });
     } catch (error) {
-      console.error('Erro ao enviar formulário:', error);
+      console.error("Erro ao enviar formulário:", error);
     } finally {
       setIsSubmitting(false);
     }

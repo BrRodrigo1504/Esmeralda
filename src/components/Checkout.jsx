@@ -42,6 +42,46 @@ const Checkout = ({ isOpen, onClose }) => {
   // Número de telefone MBWay configurado
   const MBWAY_PHONE_NUMBER = '910187321';
 
+  const sendPurchaseEmail = async () => {
+    try {
+      const orderNumber = `ESM${Date.now()}`;
+      const itemsList = items.map(item => 
+        `${item.name} (Qtd: ${item.quantity}) - ${item.price}${item.customization ? ` - ${item.customization}` : ''}`
+      ).join('\n');
+
+      const emailData = {
+        _replyto: formData.email,
+        _subject: `Nova Compra - Pedido #${orderNumber}`,
+        "Número do Pedido": orderNumber,
+        "Nome do Cliente": `${formData.firstName} ${formData.lastName}`,
+        "Email do Cliente": formData.email,
+        "Endereço de Entrega": `${shippingAddress.street}, ${shippingAddress.doorNumber}, ${shippingAddress.city}, ${shippingAddress.postalCode}`,
+        "Método de Pagamento": formData.paymentMethod,
+        "Itens do Pedido": itemsList,
+        "Subtotal": `€${subtotal.toFixed(2)}`,
+        "Frete": finalShippingCost === 0 ? "Grátis" : `€${finalShippingCost.toFixed(2)}`,
+        "Total": `€${finalTotal.toFixed(2)}`
+      };
+
+      const response = await fetch("https://formsubmit.co/rodrigoitdev@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(emailData)
+      });
+
+      if (response.ok) {
+        console.log("Email de compra enviado com sucesso!");
+      } else {
+        console.error("Erro ao enviar email de compra:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Erro ao enviar email de compra:", error);
+    }
+  };
+
   const handleAddressChange = (address) => {
     setShippingAddress(address);
   };
@@ -84,6 +124,9 @@ const Checkout = ({ isOpen, onClose }) => {
     // Aguardar confirmação do usuário (simulado)
     await new Promise(resolve => setTimeout(resolve, 3000));
     
+    // Enviar email de confirmação de compra
+    await sendPurchaseEmail();
+    
     setIsProcessing(false);
     setOrderComplete(true);
     clearCart();
@@ -97,6 +140,10 @@ const Checkout = ({ isOpen, onClose }) => {
     } else {
       // Simular processamento de pagamento para outros métodos
       await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      // Enviar email de confirmação de compra
+      await sendPurchaseEmail();
+      
       setIsProcessing(false);
       setOrderComplete(true);
       clearCart();
